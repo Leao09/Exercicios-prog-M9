@@ -1,0 +1,27 @@
+name: Test Go TDD pond4
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'Exercicios-prog-M9/ponderada-4/subscriber/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: './Exercicios-prog-M9/ponderada-4/subscriber/'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Get dependencies
+        run: go mod tidy   
+      - name: Test
+        run: go test -v --cover .
