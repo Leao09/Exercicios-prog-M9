@@ -1,11 +1,6 @@
 name: Test Go TDD pond4
 
-on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'Exercicios-prog-M9/ponderada-4/subscriber/**'
+on: [push]
 
 jobs:
   test:
