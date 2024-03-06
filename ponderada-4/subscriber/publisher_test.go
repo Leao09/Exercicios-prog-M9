@@ -28,7 +28,7 @@ var connectHandler MQTT.OnConnectHandler = func(client MQTT.Client) {
 var connectLostHandler MQTT.ConnectionLostHandler = func(client MQTT.Client, err error) {
 	fmt.Printf("Connection lost: %v", err)
 }
-
+//  teste para validar testes e adicionar mudanças
 
 func ConfigureMQTTClient() MQTT.Client {
 	err := godotenv.Load("../.env")
