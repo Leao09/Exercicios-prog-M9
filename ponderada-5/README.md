@@ -37,4 +37,4 @@ docker run -d -p 3000:3000 -v $(pwd)/ponderada.db:/ponderada.db --name metabse m
 </code></pre> 
 
 ## Video 
-[Link](https://youtu.be/V4f0fuguQvw)
+[Link](https://youtu.be/InbpkCAIVss)
