@@ -4,11 +4,11 @@ import (
 	"fmt"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	godotenv "github.com/joho/godotenv"
-	Sensor "goHive/SensorData"
+	Sensor "pond5/SensorData"
 	"os"
 	"log"
 	"time"
-	"encoding/json"
+	"strconv"
 )
 
 const (
@@ -56,18 +56,14 @@ func Client() {
 
 	for {
 		data := Sensor.SensorData()
-		jsonData, err := json.Marshal(data)
-		if err != nil {
-			log.Println("Error converting data to JSON", err)
-			return
-		}
-		msg := time.Now().Format(time.RFC3339) + " " + string(jsonData)
+
+		msg := time.Now().Format(time.RFC3339) + " - " + "sensor" + " - " + strconv.Itoa(data["NH3_ppm"]) + " - " + strconv.Itoa(data["CO_ppm"]) + " - " + strconv.Itoa(data["NO2_ppm"])
 		PublishData(client, MQTPTopic, 1, msg)
 		log.Println("Publicado:", msg)
 		time.Sleep(2 * time.Second)
 	}
 
-	client.Disconnect(250)
+	
 }
 
 func main() {

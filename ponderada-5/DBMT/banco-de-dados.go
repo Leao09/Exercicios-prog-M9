@@ -13,10 +13,10 @@ func main() {
 	// Criando a tabla
 	sqlStmt := `
   CREATE TABLE IF NOT EXISTS sensores
-  (id INTEGER PRIMARY KEY, nomeSensor TEXT, valor INTEGER,)
+  (id INTEGER PRIMARY KEY, nomeSensor TEXT, valor INTEGER)
   `
-	// Preparando o sql statement de forma segura
-	command, err := db.Prepare(sqlStmt)
+	// Preparando o sqlstatement de forma segura
+	command, err := db.Prepare(sqlStmt) 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -25,13 +25,13 @@ func main() {
 	command.Exec()
 
 	// Criando uma função para inserir usuários
-	insertUser := func(db *sql.DB, nome string, valor int) {
-		stmt := `INSERT INTO sensores(nome, valor) VALUES (?, ?)`
+	insertUser := func(db *sql.DB, nomeSensor string, valor int) {
+		stmt := `INSERT INTO sensores(nomeSensor, valor) VALUES (?, ?)`
 		statement, err := db.Prepare(stmt)
 		if err != nil {
 			log.Fatalln(err.Error())
 		}
-		_, err = statement.Exec(nome, valor)
+		_, err = statement.Exec(nomeSensor, valor)
 		if err != nil {
 			log.Fatalln(err.Error())
 		}
@@ -44,7 +44,7 @@ func main() {
 }
 
 func displayUsers(db *sql.DB) {
-	row, err := db.Query("SELECT * FROM sensores ORDER BY nome-sensor")
+	row, err := db.Query("SELECT * FROM sensores ORDER BY nomeSensor")
 	if err != nil {
 		log.Fatal(err)
 	}
