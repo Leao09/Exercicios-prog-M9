@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 	"strconv"
 	"strings"
 
@@ -27,12 +28,13 @@ func InitMongoDb(client *mongo.Client) {
 var messagePubHandler MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
 	fmt.Printf("[SUBSCRIBER][%s] %s \n", msg.Topic(), msg.Payload())
 	result := strings.Split(string(msg.Payload()), " - ")
+	timestamp := time.Now()
 	name := result[1]
 	nh3, _ := strconv.Atoi(result[2])
 	co, _ := strconv.Atoi(result[3])
 	no2, _ := strconv.Atoi(result[4])
 
-	data := Sensor{NH3_ppm: nh3, CO_ppm: co, NO2_ppm: no2, sensor: name}
+	data := Sensor{NH3_ppm: nh3, CO_ppm: co, NO2_ppm: no2, sensor: name,Timestamp: timestamp}
 	Insert(data)
 }
 
@@ -49,6 +51,7 @@ type Sensor struct {
 	 CO_ppm  int `bson:"CO_ppm"`
 	 NO2_ppm int `bson:"NO2_ppm"`
 	sensor string `'bson:"sensor"`
+	Timestamp time.Time `bson:"timestamp"`
 }
 
 func Insert(data Sensor,) {

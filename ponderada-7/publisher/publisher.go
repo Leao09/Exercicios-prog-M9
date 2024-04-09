@@ -4,7 +4,7 @@ import (
 	"fmt"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	godotenv "github.com/joho/godotenv"
-	Sensor "pond6/SensorData"
+	Sensor "ponderada7/SensorData"
 	"os"
 	"log"
 	"time"
@@ -13,7 +13,7 @@ import (
 
 const (
 	ClientID     = "publisher"
-	MQTPTopic    = "/pond-2"
+	MQTPTopic    = "ponderada"
 )
 
 var connectHandler MQTT.OnConnectHandler = func(client MQTT.Client) {
@@ -56,7 +56,6 @@ func Client() {
 
 	for {
 		data := Sensor.SensorData()
-
 		msg := time.Now().Format(time.RFC3339) + " - " + "sensor" + " - " + strconv.Itoa(data["NH3_ppm"]) + " - " + strconv.Itoa(data["CO_ppm"]) + " - " + strconv.Itoa(data["NO2_ppm"])
 		PublishData(client, MQTPTopic, 1, msg)
 		log.Println("Publicado:", msg)

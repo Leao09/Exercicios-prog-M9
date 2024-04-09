@@ -1,30 +1,42 @@
 package api
 
 import (
+	"fmt"
 	"log"
-	"go.mongodb.org/mongo-driver/bson"
-	"golang.org/x/net/context"
+
+	ckafka "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 
-func SelectFromMongo() {
-    // Executar uma busca para obter os documentos do MongoDB
-    cursor, err := collection.Find(context.Background(), bson.M{})
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer cursor.Close(context.Background())
 
-    // Iterar sobre os documentos e imprimir os dados
-    for cursor.Next(context.Background()) {
-        var data Sensor
-        if err := cursor.Decode(&data); err != nil {
-            log.Fatal(err)
-        }
-        log.Printf("Sensor data: %+v\n", data)
-    }
-    if err := cursor.Err(); err != nil {
-        log.Fatal(err)
-    }
+type KafkaConsumer struct {
+	ConfigMap *ckafka.ConfigMap
+	Topics    []string
 }
 
+func KaConsumer(configMap *ckafka.ConfigMap, topics []string) *KafkaConsumer {
+	return &KafkaConsumer{
+		ConfigMap: configMap,
+		Topics:    topics,
+	}
+}
+
+func (c *KafkaConsumer) Consume(msgChan chan *ckafka.Message) error {
+	consumer, err := ckafka.NewConsumer(c.ConfigMap)
+	if err != nil {
+		log.Printf("Error creating kafka consumer: %v", err)
+	}
+	err = consumer.SubscribeTopics(c.Topics, nil)
+	if err != nil {
+		log.Printf("Error subscribing to topics: %v", err)
+	}
+	for {
+		msg, err := consumer.ReadMessage(-1)
+		log.Printf("Message on %s: %s", msg.TopicPartition, string(msg.Value))
+		if err == nil {
+			msgChan <- msg
+		} else {
+			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
+		}
+	}
+}
