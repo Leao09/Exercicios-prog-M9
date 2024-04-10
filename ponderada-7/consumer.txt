@@ -1,0 +1,15 @@
+{"NH3_ppm":57,"CO_ppm":700,"NO2_ppm":28,"Sensor":"sensor"}
+{"NH3_ppm":86,"CO_ppm":1,"NO2_ppm":28,"Sensor":"sensor"}
+{"NH3_ppm":154,"CO_ppm":760,"NO2_ppm":13,"Sensor":"sensor"}
+{"NH3_ppm":295,"CO_ppm":474,"NO2_ppm":2,"Sensor":"sensor"}
+{"NH3_ppm":168,"CO_ppm":62,"NO2_ppm":25,"Sensor":"sensor"}
+{"NH3_ppm":198,"CO_ppm":541,"NO2_ppm":7,"Sensor":"sensor"}
+{"NH3_ppm":366,"CO_ppm":957,"NO2_ppm":8,"Sensor":"sensor"}
+{"NH3_ppm":346,"CO_ppm":387,"NO2_ppm":14,"Sensor":"sensor"}
+{"NH3_ppm":9,"CO_ppm":808,"NO2_ppm":15,"Sensor":"sensor"}
+{"NH3_ppm":297,"CO_ppm":206,"NO2_ppm":8,"Sensor":"sensor"}
+{"NH3_ppm":177,"CO_ppm":619,"NO2_ppm":2,"Sensor":"sensor"}
+{"NH3_ppm":311,"CO_ppm":231,"NO2_ppm":18,"Sensor":"sensor"}
+{"NH3_ppm":210,"CO_ppm":537,"NO2_ppm":28,"Sensor":"sensor"}
+{"NH3_ppm":398,"CO_ppm":655,"NO2_ppm":18,"Sensor":"sensor"}
+{"NH3_ppm":89,"CO_ppm":225,"NO2_ppm":23,"Sensor":"sensor"}

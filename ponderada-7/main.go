@@ -1,50 +1,50 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
-	api "ponderada7/API"
+    Imports "ponderada7/imports"
+	ckafka "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
-    
-    err := godotenv.Load("../.env")
-    if err != nil {
-        log.Fatal("Erro ao carregar o arquivo .env")
-    }
-
-    mongoUser := os.Getenv("MONGO_USER")
-    mongoPassword := os.Getenv("MONGO_PASSWORD")
-
-    serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-    opts := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@cluster0.a2vstab.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", mongoUser, mongoPassword)).
-        SetServerAPIOptions(serverAPI)
-
-    client, err := mongo.Connect(context.TODO(), opts)
-    if err != nil {
-        fmt.Println(err)
-    }
-    defer func() {
-        
-        if err = client.Disconnect(context.TODO()); err != nil {
-            fmt.Println("Iniciando o serviço...")
-            fmt.Println(err)
-        }
-    }()
-    
-    // for {
-    //     api.InitMongoDb(client)
-    //     api.ConsumerKafka()
-    //     log.Println("Publicado:")
-	// 	time.Sleep(2 * time.Second)
-    // }
-    api.InitMongoDb(client)
-    api.ConsumerKafka()
-	
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatal("Erro ao carregar o arquivo .env")
 	}
+
+	topics := []string{"ponderada"}
+	configMap := &ckafka.ConfigMap{
+		"bootstrap.servers": os.Getenv("CONFLUENT_BOOTSTRAP_SERVER_SASL"),
+		"sasl.username":     os.Getenv("CONFLUENT_API_KEY"),
+		"sasl.password":     os.Getenv("CONFLUENT_API_SECRET"),
+		"security.protocol": "SASL_SSL",
+		"sasl.mechanisms":   "PLAIN",
+		"group.id":          os.Getenv("CLUSTER_ID"),
+		"auto.offset.reset": "latest",
+	}
+
+	consumer, err := ckafka.NewConsumer(configMap)
+	if err != nil {
+		log.Fatalf("Error creating Kafka consumer: %v", err)
+	}
+
+	err = consumer.SubscribeTopics(topics, nil)
+	if err != nil {
+		log.Fatalf("Error subscribing to topics: %v", err)
+	}
+
+	fmt.Println("Kafka consumer has been started")
+
+	for {
+		msg, err := consumer.ReadMessage(-1)
+		if err == nil {
+			Imports.ProcessMessage(msg)
+		} else {
+			log.Printf("Error consuming message: %v\n", err)
+		}
+	}
+}
+

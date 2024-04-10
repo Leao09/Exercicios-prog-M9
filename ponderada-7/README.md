@@ -20,6 +20,12 @@
 BROKER_ADDR='sua_url_do_cluster'
 HIVE_USER='seu_usuário'
 HIVE_PSWD='sua_senha'
+MONGODB_USER= 'Seu_usuário'
+MONGODB_PASSWORD= 'Sua_senha'
+CONFLUENT_BOOTSTRAP_SERVER_SASL='seu_server'
+CONFLUENT_API_KEY='sua_api_key'
+CONFLUENT_API_SECRET='seu_secret'
+CLUSTER_ID='seu_cluster_id'
 </code></pre> 
 - É importante resaltar que caso você opte por mudar os nomes nomes das variáveis de ambiente no arquivo será necessário realizar mudanças no código.
 - Assim para rodar o publisher basta rodar os seguintes comando 
@@ -27,14 +33,12 @@ HIVE_PSWD='sua_senha'
 cd publisher
 go run publisher.go
 </code></pre> 
-- Para rodar o subscriber com a API que alimenta o banco de dados com os dados enviados pelo subscriber 
+- Para rodar o consumer que ira consumir a fila do kafka
 <pre><code>
 go run main.go
 </code></pre> 
-Por fim, com o publisher e subscriber + api rodando, acesse a imagem do container do metabase com o seguinte comando:
-<pre><code>
-docker run -d -p 3000:3000 -v $(pwd)/ponderada.db:/ponderada.db --name metabse metabase/metabase
-</code></pre> 
+Por fim, basta olhar pela interface do confluent caso tenha duvidas se as mensagens estão sendo consumidads e para validação de teste basta olhar o arquivo publisher.txt e consumer.txt se eles estiver iguais significa que está tudo certo
+
 
 ## Video 
-[Link](https://youtu.be/InbpkCAIVss)
+[Link](https://youtu.be/Pwgp23dzrlQ)
